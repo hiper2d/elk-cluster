@@ -1,2 +1,4 @@
-**/data/
 .idea/
+**/data/*
+!**/data/.gitkeep
+**/*.iml

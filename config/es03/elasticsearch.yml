@@ -1,0 +1,16 @@
+node:
+  name: es03
+  master: false
+  data: true
+
+discovery.seed_hosts:
+  - es01
+
+cluster:
+  routing.allocation.disk.threshold_enabled: false
+  name: elk-docker-cluster
+
+network.host:
+  - es03
+
+bootstrap.memory_lock: true

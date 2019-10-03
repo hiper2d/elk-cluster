@@ -5,8 +5,12 @@ node:
 
 discovery.seed_hosts:
   - es01
+  - es02
 
 cluster:
+  initial_master_nodes:
+    - es01
+    - es02
   routing.allocation.disk.threshold_enabled: false
   name: elk-docker-cluster
 

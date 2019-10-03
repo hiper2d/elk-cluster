@@ -20,3 +20,5 @@ It also make sense to install the ElasticSearch Head Chrome extension to monitor
 Then run the third data node to so how it automatically joins to the existing cluster with no restart
 
     docker run --rm --name es03 --net esnet -v $(pwd)/config/es03/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml --ulimit memlock=-1:-1 docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+
+This trick doesn't work with docker-compose. I have created two Compose files and wanted the second one to join the docker network created by the first one. This doesn't work since each Compose file creates a separate network.

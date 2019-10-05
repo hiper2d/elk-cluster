@@ -33,4 +33,21 @@ The dataset can be downloaded from https://www.imdb.com/interfaces/
 
 The idea is to import them to the Elasticsearch cluster and to have fun with the data then. But the datasets are in the plain text format and should be converted to JSON first with a Python script.  
 
-...in progress
+1. Download movies and actors datasets from https://www.imdb.com/interfaces/
+
+        curl -o dataset/title.basics.tsv.gz https://datasets.imdbws.com/title.basics.tsv.gz
+        curl -o dataset/name.basics.tsv.gz https://datasets.imdbws.com/title.basics.tsv.gz
+
+2. Unpack them:
+
+        gzip -d dataset/name.basics.tsv.gz > dataset/name.basics.tsv
+        gzip -d dataset/title.basics.tsv.gz > dataset/title.basics.tsv
+
+3. Verify:
+
+        head -n 10 dataset/name.basics.tsv
+        head -n 10 dataset/title.basics.tsv
+
+3. Run script which reads both datasets files, put movies titles to actors records and converts actors records to the json format
+
+        python scripts/import_imdb_dataset.py

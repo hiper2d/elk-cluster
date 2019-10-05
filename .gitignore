@@ -1,5 +1,8 @@
 .idea/
-dataset/
-**/data/*
 **/*.iml
+
+dataset/
+scripts/*.json
+
+**/data/*
 !**/.gitkeep

@@ -1,7 +1,9 @@
 Elasticsearch Logstash Kibana learning stuff
 =============
 
-## How to run
+This is my practice of the ELK course "ElasticSearch, LogStash, Kibana (the ELK Stack)" by Manuj Aggarwal and the TetraTutorials Team. The course is a bit outdated a bit (things change too fast these days), thus I had to updated everything including ELK v7, IMBD datasets, import Python scripts, etc.
+
+## How to run ELK cluster
 
 ### Docker compose
 
@@ -13,12 +15,22 @@ It also make sense to install the ElasticSearch Head Chrome extension to monitor
 
 ### Separate Docker containers
 
+With this I played with adding a third node to an already running cluster. First, run two nodes and a Kibana instance:
+
     docker run --rm --name es01 --net esnet -p 9200:9200 -v $(pwd)/config/es01/data:/usr/share/elasticsearch/data -v $(pwd)/config/es01/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml --ulimit memlock=-1:-1 docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     docker run --rm --name es02 --net esnet -v $(pwd)/config/es02/data:/usr/share/elasticsearch/data -v $(pwd)/config/es02/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml --ulimit memlock=-1:-1 docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     docker run --name kibana --net esnet -p 5601:5601 docker.elastic.co/kibana/kibana:7.4.0
 
-Then run the third data node to so how it automatically joins to the existing cluster with no restart
+Then run the third data node, it automatically joins to the existing cluster and no restart is needed:
 
     docker run --rm --name es03 --net esnet -v $(pwd)/config/es03/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml --ulimit memlock=-1:-1 docker.elastic.co/elasticsearch/elasticsearch:7.4.0
 
-This trick doesn't work with docker-compose. I have created two Compose files and wanted the second one to join the docker network created by the first one. This doesn't work since each Compose file creates a separate network.
+Pretty cool. This trick doesn't work with docker-compose. I have created two Compose files and wanted the second one to join the docker network created by the first one. This doesn't work since each Compose file creates a separate network. At least this is how Compose v3 works and I didn't find the right way to join their networks. Will appreciate if anybody helps me to figure this out.
+
+## Work with IMDB Datasets
+
+The dataset can be downloaded from https://www.imdb.com/interfaces/
+
+The idea is to import them to the Elasticsearch cluster and to have fun with the data then. But the datasets are in the plain text format and should be converted to JSON first with a Python script.  
+
+...in progress

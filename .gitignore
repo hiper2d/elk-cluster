@@ -1,4 +1,5 @@
 .idea/
+dataset/
 **/data/*
-!**/data/.gitkeep
 **/*.iml
+!**/.gitkeep

@@ -10,7 +10,7 @@ from hashlib import sha1
 import codecs
 
 # import requests
-# url = "http://33.33.33.33:9200/"
+# url = "http://localhost:9200/"
 # def index_item_to_es(item):
 #     requests.put(url, data=item)
 #     pass
@@ -27,13 +27,13 @@ def write_a_bulk_file(items):
 
 
 def main(buffer):
-    somelines = buffer.split('THE %s LIST' % listname)[1]
-    somelines = somelines[50:]
-    splittedlist = somelines.split('\n\n')
+    lines = buffer.split('THE %s LIST' % listname)[1]
+    lines = lines[50:]
+    lines_list = lines.split('\n\n')
 
     items = []
 
-    for item in splittedlist[:50000]:
+    for item in lines_list[:50000]:
         item = [x.split('\t') for x in item.split('\n\t\t\t')]
         item = item[0]
         name = item[0]
@@ -99,5 +99,5 @@ def main(buffer):
 
 if __name__ == '__main__':
     with open('%s.list' % listname.lower()) as f:
-        buffer = f.read()
-    main(buffer)
+        content = f.read()
+    main(content)

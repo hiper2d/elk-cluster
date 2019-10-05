@@ -10,6 +10,12 @@ import json
 def get_or_empty(val):
     if val == '\\N':
         return ''
+    return val
+
+
+def get_array_or_empty(val):
+    if val == '\\N':
+        return '[]'
     return '[' + val + ']'
 
 
@@ -24,7 +30,7 @@ def get_movies_or_empty(movies_string, movies_dict):
 
 
 def write_a_bulk_file(items):
-    with open('../dataset/imdb.json', 'w') as f:
+    with open('../dataset/imdb.json', 'w', encoding='utf-8') as f:
         lines = '\n'.join(items)
         lines += '\n'
         f.write(lines)
@@ -48,7 +54,7 @@ def main(actors, movies):
         primary_name = get_or_empty(tokens[1])
         birth_year = get_or_empty(tokens[2])
         death_year = get_or_empty(tokens[3])
-        primary_profession = get_or_empty(tokens[4])
+        primary_profession = get_array_or_empty(tokens[4])
         known_for_titles = get_movies_or_empty(tokens[5], movie_dict)
 
         json_items.append(json.dumps({
@@ -57,7 +63,7 @@ def main(actors, movies):
             'death_year': death_year,
             'primary_profession': primary_profession,
             'known_for_titles': known_for_titles
-        }))
+        }, ensure_ascii=False))
 
     write_a_bulk_file(json_items)
 

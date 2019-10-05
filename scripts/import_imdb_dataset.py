@@ -5,6 +5,7 @@
 # IMDB datasets can be found here: https://www.imdb.com/interfaces/
 
 import json
+from hashlib import sha1
 
 
 def get_or_empty(val):
@@ -30,7 +31,7 @@ def get_movies_or_empty(movies_string, movies_dict):
 
 
 def write_a_bulk_file(items):
-    with open('../dataset/imdb.json', 'w', encoding='utf-8') as f:
+    with open('../dataset/imdb.basics.json', 'w', encoding='utf-8') as f:
         lines = '\n'.join(items)
         lines += '\n'
         f.write(lines)
@@ -51,12 +52,16 @@ def main(actors, movies):
     for line in actor_lines:
         tokens = line.split('\t')
 
+        actor_id = tokens[0]
         primary_name = get_or_empty(tokens[1])
         birth_year = get_or_empty(tokens[2])
         death_year = get_or_empty(tokens[3])
         primary_profession = get_array_or_empty(tokens[4])
         known_for_titles = get_movies_or_empty(tokens[5], movie_dict)
 
+        #  See the Elastic Bulk API for the json file format details:
+        #  https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
+        json_items.append(json.dumps({"index": {"_type": "actors", "_id": sha1(actor_id.encode('utf-8')).hexdigest()}}))
         json_items.append(json.dumps({
             'primary_name': primary_name,
             'birth_year': birth_year,

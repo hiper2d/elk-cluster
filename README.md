@@ -53,3 +53,11 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
 3. Run script which reads both datasets files, put movies titles to actors records and converts actors records to the json format
 
         python scripts/import_imdb_dataset.py
+
+4. Verify the script output:
+
+        head -n 20 dataset/imdb.basics.json
+    
+5. Import JSON to Elasticsearch Cluster (make sure it's running first):
+
+        curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/_bulk --data-binary "dataset/imdb.basics.json"

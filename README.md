@@ -11,7 +11,9 @@ This is my practice of the ELK course "ElasticSearch, LogStash, Kibana (the ELK 
 
 Check it running at http://localhost:5601
 
-It also make sense to install the ElasticSearch Head Chrome extension to monitor Elastic nodes
+It also make sense to install the ElasticSearch Head Chrome extension to monitor Elastic nodes:
+
+![Elastic Head Plugin](https://raw.githubusercontent.com/hiper2d/elk-cluster/master/images/ElasticHead.PNG)
 
 ### Separate Docker containers
 

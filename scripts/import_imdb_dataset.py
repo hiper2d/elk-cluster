@@ -8,6 +8,10 @@ import json
 from hashlib import sha1
 
 
+# dataset_type = 'test'
+dataset_type = 'basics'
+
+
 def get_or_empty(val):
     if val == '\\N':
         return ''
@@ -31,7 +35,7 @@ def get_movies_or_empty(movies_string, movies_dict):
 
 
 def write_a_bulk_file(items):
-    with open('../dataset/imdb.basics.json', 'w', encoding='utf-8') as f:
+    with open('../dataset/imdb.%s.json' % dataset_type, 'w', encoding='utf-8') as f:
         lines = '\n'.join(items)
         lines += '\n'
         f.write(lines)
@@ -61,7 +65,7 @@ def main(actors, movies):
 
         #  See the Elastic Bulk API for the json file format details:
         #  https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
-        json_items.append(json.dumps({"index": {"_type": "actors", "_id": sha1(actor_id.encode('utf-8')).hexdigest()}}))
+        json_items.append(json.dumps({"index": {"_index": "actors", "_id": sha1(actor_id.encode('utf-8')).hexdigest()}}))
         json_items.append(json.dumps({
             'primary_name': primary_name,
             'birth_year': birth_year,
@@ -74,8 +78,8 @@ def main(actors, movies):
 
 
 if __name__ == '__main__':
-    with open('../dataset/name.basics.tsv') as f:
+    with open('../dataset/name.%s.tsv' % dataset_type) as f:
         name_content = f.read()
-    with open('../dataset/title.basics.tsv') as f:
+    with open('../dataset/title.%s.tsv' % dataset_type) as f:
         title_content = f.read()
     main(name_content, title_content)

@@ -20,18 +20,18 @@ def get_or_empty(val):
 
 def get_array_or_empty(val):
     if val == '\\N':
-        return '[]'
-    return '[' + val + ']'
+        val = []
+    return val.split(',')
 
 
 def get_movies_or_empty(movies_string, movies_dict):
     if movies_string == '\\N':
-        return ''
+        return []
     movie_tokens = movies_string.split(',')
     titles = []
     for movie_id in movie_tokens:
         titles.append(movies_dict[movie_id] if movie_id in movies_dict else 'unknown')
-    return '[' + ','.join(titles) + ']'
+    return titles
 
 
 def write_a_bulk_file(items):

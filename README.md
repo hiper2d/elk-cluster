@@ -60,4 +60,6 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
     
 5. Import JSON to Elasticsearch Cluster (make sure it's running first):
 
-        curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/_bulk --data-binary "dataset/imdb.basics.json"
+        curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/_bulk --data-binary "@dataset/imdb.basics.json"
+
+    ...this isn't gonna work since the JSON size is way too high than allowed by Elasticsearch. It should be split into 500-Mb-max pieces. Instead I'm going to make the script to do this

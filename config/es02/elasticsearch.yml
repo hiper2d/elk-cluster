@@ -3,6 +3,9 @@ node:
   master: true
   data: true
 
+http:
+  max_content_length: 500mb
+
 discovery.seed_hosts:
   - es01
 

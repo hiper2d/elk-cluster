@@ -54,12 +54,15 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
 
         python scripts/import_imdb_dataset.py
 
+    This will generate about 30 JSON files. Elasticsearch restricts too large files to be imported, thus the output should be split in chunks of 500k rows each. I realized that after tried to import a single 2Gb JSON file and got an error. The workaround with many files is ugly, it's probably better to use the Elasticsearch Client. But I've already did it with files, sorry.
+
 4. Verify the script output:
 
-        head -n 20 dataset/imdb.basics.json
+        ls -l dataset/imdb.basics*.json
+        head -n 20 dataset/imdb.basics1.json    
     
 5. Import JSON to Elasticsearch Cluster (make sure it's running first):
 
-        curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/_bulk --data-binary "@dataset/imdb.basics.json"
+        find dataset/ -name imdb.basics*.json -exec curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/_bulk --data-binary "@{}" \;
 
-    ...this isn't gonna work since the JSON size is way too high than allowed by Elasticsearch. It should be split into 500-Mb-max pieces. Instead I'm going to make the script to do this
+    You should have around 10 millions documents in the actors index now.

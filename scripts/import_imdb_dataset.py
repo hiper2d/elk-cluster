@@ -35,10 +35,16 @@ def get_movies_or_empty(movies_string, movies_dict):
 
 
 def write_a_bulk_file(items):
-    with open('../dataset/imdb.%s.json' % dataset_type, 'w', encoding='utf-8') as f:
-        lines = '\n'.join(items)
+    step = 500000  # lines per file
+    length = len(items)
+    num = 0
+    for i in range(0, length, step):
+        cut = items[i: i + step]
+        lines = '\n'.join(cut)
         lines += '\n'
-        f.write(lines)
+        num += 1
+        with open('../dataset/imdb.%s%d.json' % (dataset_type, num), 'w', encoding='utf-8') as f:
+            f.write(lines)
 
 
 def main(actors, movies):
@@ -72,7 +78,7 @@ def main(actors, movies):
             'death_year': death_year,
             'primary_profession': primary_profession,
             'known_for_titles': known_for_titles
-        }, ensure_ascii=False))
+        }, ensure_ascii=False))  # ensure_ascii is needed to keep Latin symbols in titles and names
 
     write_a_bulk_file(json_items)
 

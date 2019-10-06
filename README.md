@@ -66,3 +66,7 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
         find dataset/ -name imdb.basics*.json -exec curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/_bulk --data-binary "@{}" \;
 
     You should have around 10 millions documents in the actors index now.
+
+6. Don't forget to remove few Gb of rubbish from your filesystem:
+
+        rm dataset/imdb.basics*

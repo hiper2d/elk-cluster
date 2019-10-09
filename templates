@@ -1,8 +1,0 @@
-PUT _template/template_1
-{
-  "index_patterns": ["*"],
-  "settings": {
-    "number_of_shards": 2,
-    "number_of_replicas": 1
-  }
-}

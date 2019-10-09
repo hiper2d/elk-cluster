@@ -29,6 +29,18 @@ Then run the third data node, it automatically joins to the existing cluster and
 
 Pretty cool. This trick doesn't work with docker-compose. I have created two Compose files and wanted the second one to join the docker network created by the first one. This doesn't work since each Compose file creates a separate network. At least this is how Compose v3 works and I didn't find the right way to join their networks. Will appreciate if anybody helps me to figure this out.
 
+When run for the first time, go to Kibana Dev Tool and add a common template to specify 2 shards by default for every index:
+
+    PUT _template/template_1
+    {
+      "index_patterns": ["*"],
+      "settings": {
+        "number_of_shards": 2,
+        "number_of_replicas": 1
+      }
+    }
+
+
 ## Work with IMDB Datasets
 
 The dataset can be downloaded from https://www.imdb.com/interfaces/
@@ -70,3 +82,12 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
 6. Don't forget to remove few Gb of rubbish from your filesystem:
 
         rm dataset/imdb.basics*
+        
+7. Add replicas configuration to the actors index:
+        
+        PUT /actors/_settings
+        {
+            "index" : {
+                "number_of_replicas" : 1
+            }
+        }

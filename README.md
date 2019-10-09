@@ -62,32 +62,23 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
         head -n 10 dataset/name.basics.tsv
         head -n 10 dataset/title.basics.tsv
 
-3. Run script which reads both datasets files, put movies titles to actors records and converts actors records to the json format
+4. Run script which reads both datasets files, put movies titles to actors records and converts actors records to the json format
 
         python scripts/import_imdb_dataset.py
 
     This will generate about 30 JSON files. Elasticsearch restricts too large files to be imported, thus the output should be split in chunks of 500k rows each. I realized that after tried to import a single 2Gb JSON file and got an error. The workaround with many files is ugly, it's probably better to use the Elasticsearch Client. But I've already did it with files, sorry.
 
-4. Verify the script output:
+5. Verify the script output:
 
         ls -l dataset/imdb.basics*.json
         head -n 20 dataset/imdb.basics1.json    
     
-5. Import JSON to Elasticsearch Cluster (make sure it's running first):
+6. Import JSON to Elasticsearch Cluster (make sure it's running first):
 
         find dataset/ -name imdb.basics*.json -exec curl -s -H "Content-Type: application/x-ndjson" -XPOST localhost:9200/_bulk --data-binary "@{}" \;
 
     You should have around 10 millions documents in the actors index now.
 
-6. Don't forget to remove few Gb of rubbish from your filesystem:
+7. Don't forget to remove few Gb of rubbish from your filesystem:
 
         rm dataset/imdb.basics*
-        
-7. Add replicas configuration to the actors index:
-        
-        PUT /actors/_settings
-        {
-            "index" : {
-                "number_of_replicas" : 1
-            }
-        }

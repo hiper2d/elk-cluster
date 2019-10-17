@@ -15,9 +15,7 @@ services:
         source: ./config/es01/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
-      - type: volume
-        source: ./config/es01/data
-        target: /usr/share/elasticsearch/data
+      - ./config/es01/data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
@@ -37,9 +35,7 @@ services:
         source: ./config/es02/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
-      - type: volume
-        source: ./config/es02/data
-        target: /usr/share/elasticsearch/data
+      - ./config/es02/data:/usr/share/elasticsearch/data
     networks:
       - esnet
 

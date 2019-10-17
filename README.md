@@ -1,6 +1,8 @@
 Elasticsearch Logstash Kibana learning stuff
 =============
 
+[![Elastic Stack version](https://img.shields.io/badge/ELK-7.4.0-blue.svg?style=flat)](https://www.elastic.co/what-is/elk-stack)
+
 This is my practice of the ELK course "ElasticSearch, LogStash, Kibana (the ELK Stack)" by Manuj Aggarwal and the TetraTutorials Team. The course is a bit outdated a bit (things change too fast these days), thus I had to updated everything including ELK v7, IMBD datasets, import Python scripts, etc.
 
 ## How to run ELK cluster

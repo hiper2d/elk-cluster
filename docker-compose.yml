@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     container_name: es01
     environment:
       ES_JAVA_OPTS: -Xmx1g
@@ -11,15 +11,20 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./config/es01/data:/usr/share/elasticsearch/data
-      - ./config/es01/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - type: bind
+        source: ./config/es01/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: ./config/es01/data
+        target: /usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
       - esnet
 
   es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     container_name: es02
     environment:
       ES_JAVA_OPTS: -Xmx1g
@@ -28,13 +33,18 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./config/es02/data:/usr/share/elasticsearch/data
-      - ./config/es02/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - type: bind
+        source: ./config/es02/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: ./config/es02/data
+        target: /usr/share/elasticsearch/data
     networks:
       - esnet
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.4.0
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
     container_name: kibana
     environment:
       ELASTICSEARCH_HOSTS: http://es01:9200
@@ -42,6 +52,9 @@ services:
       - 5601:5601
     networks:
       - esnet
+    depends_on:
+      - es01
+      - es02
 
 networks:
   esnet:

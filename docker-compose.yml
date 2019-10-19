@@ -52,5 +52,27 @@ services:
       - es01
       - es02
 
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+    volumes:
+      - type: bind
+        source: ./config/logstash/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./config/logstash/pipeline
+        target: /usr/share/logstash/pipeline
+        read_only: true
+    ports:
+      - "5000:5000"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - esnet
+    depends_on:
+      - es01
+      - es02
+
 networks:
   esnet:

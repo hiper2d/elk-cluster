@@ -2,6 +2,7 @@
 **/*.iml
 
 dataset/
+logs/
 scripts/*.json
 
 **/data/*

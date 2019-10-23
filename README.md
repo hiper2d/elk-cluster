@@ -89,7 +89,7 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
 
 Run Logstash instance stdin -> stdout:
 
-        docker run --rm -it \
+        docker run --rm --name logstash -it \
             -v $(pwd)/config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml \ 
             -v $(pwd)/config/logstash/pipeline:/usr/share/logstash/pipeline \
             docker.elastic.co/logstash/logstash:7.4.0

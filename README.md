@@ -87,10 +87,7 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
 
 ### Playing with Logstash
 
-Run Logstash instance stdin -> stdout:
+After you run everything with the Docker Compose send a message to Logstash and find it in Elasticsearch:
 
-        docker run --rm --name logstash -it \
-            -v $(pwd)/config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml \ 
-            -v $(pwd)/config/logstash/pipeline:/usr/share/logstash/pipeline \
-            docker.elastic.co/logstash/logstash:7.4.0
+        curl -XPOST http://localhost:5000 -d "John Smith 39"
 

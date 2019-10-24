@@ -54,6 +54,7 @@ services:
 
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+    container_name: logstash
     volumes:
       - type: bind
         source: ./config/logstash/logstash.yml

@@ -91,3 +91,7 @@ After you run everything with the Docker Compose send a message to Logstash and 
 
         curl -XPOST http://localhost:5000 -d "John Smith 39"
 
+Next we a going to send Linux syslog to Elasticsearch via Logstash. I work in Arch Linux thus I made a syslog dump into the dataset/syslog.log file
+
+        journalctl > dataset/syslog.log # dump Arch Linux syslog into a file
+

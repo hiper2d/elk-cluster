@@ -5,7 +5,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     container_name: es01
     environment:
-      ES_JAVA_OPTS: -Xmx1g
+      ES_JAVA_OPTS: -Xmx1g -Des.http.cname_in_publish_address=true
     ulimits:
       memlock:
         soft: -1
@@ -25,7 +25,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     container_name: es02
     environment:
-      ES_JAVA_OPTS: -Xmx1g
+      ES_JAVA_OPTS: -Xmx1g -Des.http.cname_in_publish_address=true
     ulimits:
       memlock:
         soft: -1
@@ -61,9 +61,8 @@ services:
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./config/logstash/pipeline
-        target: /usr/share/logstash/pipeline
-        read_only: true
+        source: ./config/logstash/pipeline/tcp-imdb-elastic.conf
+        target: /usr/share/logstash/pipeline/tcp-imdb-elastic.conf
     ports:
       - "5000:5000"
       - "9600:9600"

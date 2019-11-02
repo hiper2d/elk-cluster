@@ -21,13 +21,23 @@ It also make sense to install the ElasticSearch Head Chrome extension to monitor
 
 With this I played with adding a third node to an already running cluster. First, run two nodes and a Kibana instance:
 
-    docker run --rm --name es01 --net esnet -p 9200:9200 -v $(pwd)/config/es01/data:/usr/share/elasticsearch/data -v $(pwd)/config/es01/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml --ulimit memlock=-1:-1 docker.elastic.co/elasticsearch/elasticsearch:7.4.0
-    docker run --rm --name es02 --net esnet -v $(pwd)/config/es02/data:/usr/share/elasticsearch/data -v $(pwd)/config/es02/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml --ulimit memlock=-1:-1 docker.elastic.co/elasticsearch/elasticsearch:7.4.0
-    docker run --name kibana --net esnet -p 5601:5601 docker.elastic.co/kibana/kibana:7.4.0
+    docker run --rm --name es01 --net esnet -p 9200:9200 --ulimit memlock=-1:-1 \
+    -v $(pwd)/config/es01/data:/usr/share/elasticsearch/data \
+    -v $(pwd)/config/es01/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
+    docker.elastic.co/elasticsearch/elasticsearch:7.4.1
+    
+    docker run --rm --name es02 --net esnet --ulimit memlock=-1:-1 \
+    -v $(pwd)/config/es02/data:/usr/share/elasticsearch/data \
+    -v $(pwd)/config/es02/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
+    docker.elastic.co/elasticsearch/elasticsearch:7.4.1
+    
+    docker run --name kibana --net esnet -p 5601:5601 docker.elastic.co/kibana/kibana:7.4.1
 
 Then run the third data node, it automatically joins to the existing cluster and no restart is needed:
 
-    docker run --rm --name es03 --net esnet -v $(pwd)/config/es03/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml --ulimit memlock=-1:-1 docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    docker run --rm --name es03 --net esnet --ulimit memlock=-1:-1 \
+    -v $(pwd)/config/es03/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
+    docker.elastic.co/elasticsearch/elasticsearch:7.4.1
 
 The third node will be attached to the existing container.
 
@@ -41,7 +51,6 @@ When run the container for the first time, go to Kibana Dev Tool and add a commo
         "number_of_replicas": 1
       }
     }
-
 
 ### Import IMDB Datasets to Elasticsearch via Bulk API
 
@@ -87,11 +96,19 @@ The idea is to import them to the Elasticsearch cluster and to have fun with the
 
 ### Playing with Logstash
 
+To run just a single instance of Logstash without anything else run the following
+
+        docker run --rm -it -p 5000:5000 \
+        -v $(pwd)/config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml \
+        -v $(pwd)/config/logstash/pipeline/tcp-syslog-stdout.conf:/usr/share/logstash/pipeline/tcp-syslog-stdout.conf \
+        docker.elastic.co/logstash/logstash:7.4.1
+
+This will start Logstash which listens for tcp messages on the 5000 port and output the result messages to a console.
+
+        # dump Arch Linux syslog into a file
+        journalctl > dataset/syslog.log
+        # send the dump to logstash and get a parsed messages in Logstash stdout
+        cat dataset/syslog.log | nc localhost 5000
+
 After you run everything with the Docker Compose send a message to Logstash and find it in Elasticsearch:
-
-        curl -XPOST http://localhost:5000 -d "John Smith 39"
-
-Next we a going to send Linux syslog to Elasticsearch via Logstash. I work in Arch Linux thus I made a syslog dump into the dataset/syslog.log file
-
-        journalctl > dataset/syslog.log # dump Arch Linux syslog into a file
 

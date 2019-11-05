@@ -110,5 +110,12 @@ This will start Logstash which listens for tcp messages on the 5000 port and out
         # send the dump to logstash and get a parsed messages in Logstash stdout
         cat dataset/syslog.log | nc localhost 5000
 
-After you run everything with the Docker Compose send a message to Logstash and find it in Elasticsearch:
+Next thing we do is sending the imdb actors database to Elastingsearch vis Logstash. We will import an original tsv file from IMDB by sending it's content via tcp to Logatsh, parse it via filters and output into Elasticsearch:
+
+        # Run ELK cluster
+        docker-compose up
+        # Send the Names database (skiping a header row) into Logastash over tcp
+        tail -n +2 dataset/name.basics.tsv | nc localhost 5000
+
+        
 
